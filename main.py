@@ -13,6 +13,11 @@ import csv
 import operator
 import datetime
 import dateutil.parser
+import matplotlib.pyplot as plt
+plt.rcdefaults()
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 # TODO: stemming. will need to follow the example
 # TODO:
@@ -380,6 +385,49 @@ class IndexedText(object):
             count = str(fd[mark])
             results.append("%(mark)s, %(count)s" % locals())
         return(results)
+
+
+    def punctuation_by_section(self):
+
+
+        plt.rcdefaults()
+        fig, ax = plt.subplots()
+
+        punctuation_marks = ['»', '«', ',', '-', '.', '!',
+                             "\"", ':', ';', '?', '...', '\'']
+
+        y_pos = np.arange(len(punctuation_marks))
+        thetext = self.text
+        parts = [thetext[i:i+1000] for i in range(0, len(thetext), 1000)]
+
+
+        for q in range(0, len(parts)):
+            thnumber = str(q + 1)
+            newthing = parts[q]
+            newthing = re.findall(r"[\w]+|[^\s\w]", newthing)
+            occur = []
+
+
+            for i in range(0, len(punctuation_marks)):
+                z=0
+                for x in range(0, len(newthing)):
+                    if punctuation_marks[i] == newthing[x]:
+                        z = z+1
+                occur.append(z)
+        
+            y_pos = np.arange(len(punctuation_marks))
+
+            plt.barh(y_pos, occur, align='center', alpha=0.5)
+            plt.yticks(y_pos, punctuation_marks)
+            plt.xlabel('Occur')
+            plt.title('Punctuation marks in section #' + thnumber + " of text")
+            plt.show()
+
+
+
+
+
+    
 
     def most_common(self):
         """takes a series of tokens and returns most common 50 words."""
