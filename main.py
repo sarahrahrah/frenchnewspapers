@@ -16,7 +16,8 @@ import dateutil.parser
 import matplotlib.pyplot as plt
 plt.rcdefaults()
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure, show
+from matplotlib.ticker import MaxNLocator
 
 
 # TODO: stemming. will need to follow the example
@@ -424,7 +425,58 @@ class IndexedText(object):
             plt.show()
 
 
+        def puncseq (self):
+        
 
+        punctuation_marks = ['»', '«', ',', '-', '.', '!',
+                             "\"", ':', ';', '?', '...', '\'']
+        mark = input("Please enter the punctuation mark you want to plot: » « , - . ! : ; ? ... ")
+        for i in range (0, len(punctuation_marks)):
+
+            if mark == punctuation_marks[i]:
+
+
+                text = self.text
+
+                parts = [text[i:i+500] for i in range(0, len(text), 500)]
+
+    ##The 500 character count can be changed depending on how long one wants the length of each
+    ## subdivisions to be
+                totaltally =[]
+                
+                for q in range(0, len(parts)):
+                    thnumber = str(q + 1)
+                    newthing = parts[q]
+                    newthing = re.findall(r"[\w]+|[^\s\w]", newthing)                
+                    z=0
+                    for x in range(0, len(newthing)):
+                        if punctuation_marks[i] == newthing[x]:
+                            z = z+1
+                    totaltally.append(z)
+                        
+                    y_pos = np.arange(len(punctuation_marks[i]))
+                
+                noofsectionsforxaxis = []
+
+                newvari = punctuation_marks[i]
+
+                for i in range (0, len(totaltally)):
+                    addedone = i + 1
+                    noofsectionsforxaxis.append(addedone)
+
+                totaltally.sort(reverse=True)
+
+        plt.rcdefaults()
+        fig, ax = plt.subplots()       
+        ax = figure().gca()
+        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+        plt.plot(noofsectionsforxaxis, totaltally)
+        plt.axis([1, len(noofsectionsforxaxis), 0, totaltally[0]])
+        ax.set_xlabel('Chronological textual subdivision #')
+        ax.set_title('The Punctuation Mark ' + newvari + ' Over the Course of Text')
+        ax.set_ylabel('The number of occurrences of ' + newvari)
+        plt.show()
+        
 
 
     
